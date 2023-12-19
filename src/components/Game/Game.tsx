@@ -86,7 +86,7 @@ const Game = () => {
                 if (currentWord) {
                     send(currentWord)
                 }
-            }, 10000 - cities.length * 10)
+            }, 5000 - cities.length * 10)
 
         } else {
             input.current?.focus()
