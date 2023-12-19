@@ -1,5 +1,3 @@
-import {useEffect, useState} from "react";
-
 export const cities = [
     'Абакан',
     'Азов',
@@ -324,38 +322,3 @@ export const cities = [
     'Ярославль'
 ];
 
-
-interface Obj {
-    Code: string;
-    Name: string;
-    ReceptionLaP: string;
-    DeliveryLaP: string;
-    Reception: string;
-    PickupPoint: string;
-    CourierDelivery: string;
-    ForeignReceptionReturns: string;
-    Terminal: string;
-    Kladr: string;
-    Region: string;
-    CountryCode: string;
-    UniqName: string;
-    District: string;
-    Prefix: string;
-    CourierReception: string;
-}
-
-const url = 'https://api.boxberry.ru/json.php?token=742af67ca5c56ffc102ae627d7a877e2&method=ListCitiesFull&CountryCode=643'
-export const CitiesGet = () => {
-    const [cities, setCities] = useState<string[]>([])
-
-    useEffect(() => {
-        fetch(url)
-            .then(res => res.json())
-            .then((data: Obj[]) => {
-                setCities(data.map(item => item.Name))
-            })
-            .catch(console.log)
-        console.log(cities);
-    }, []);
-    return cities
-}
