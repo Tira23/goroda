@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useReducer, useRef, useState} from 'react';
+import React, {useEffect, useReducer, useRef, useState} from 'react';
 import Header from "../Header/Header";
 import icon from '../../static/Icon.svg'
 import Word from "../Word/Word";
@@ -22,7 +22,7 @@ const Game = () => {
     const window = useRef<HTMLDivElement>(null);
     const aiThinkStyle = isAiThink ? 'bg-zinc-400' : 'bg-violet-600 cursor-pointer hover:bg-purple-500 transition delay-50 hover:shadow-130 ease-in-out '
 
-    const send = useCallback((word = input.current?.value) => {
+    const send = (word = input.current?.value) => {
         if (!word) {
             return
         }
@@ -52,6 +52,7 @@ const Game = () => {
             AI: isAiThink,
             id: Date.now()
         }
+
         filterCities(currentWord.name)
         reset()
         startTheGame(true)
@@ -63,7 +64,7 @@ const Game = () => {
         }
 
 
-    },[isAiThink])
+    }
 
     const listen = (e: KeyboardEvent) => {
         if (e.key === 'Enter') {
