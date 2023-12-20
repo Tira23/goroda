@@ -1,4 +1,4 @@
-import React, {useEffect, useReducer, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useReducer, useRef, useState} from 'react';
 import Header from "../Header/Header";
 import icon from '../../static/Icon.svg'
 import Word from "../Word/Word";
@@ -22,7 +22,7 @@ const Game = () => {
     const window = useRef<HTMLDivElement>(null);
     const aiThinkStyle = isAiThink ? 'bg-zinc-400' : 'bg-violet-600 cursor-pointer hover:bg-purple-500 transition delay-50 hover:shadow-130 ease-in-out '
 
-    const send = (word = input.current?.value) => {
+    const send = useCallback((word = input.current?.value) => {
         if (!word) {
             return
         }
@@ -40,7 +40,7 @@ const Game = () => {
         }
         if (wordArray.length && !isAiThink) {
             const [, prevLastChar] = charForFind(wordArray.at(-1)!.name)
-            const findCity = cities.find(item => item === curWord)
+            const findCity = cities.find(item => item.toLowerCase() === curWord.toLowerCase())
             if (!findCity) {
                 input.current!.value = ''
                 setPlaceholder(`А точно такой город доступен? Вам на ${prevLastChar}`)
@@ -52,7 +52,6 @@ const Game = () => {
             AI: isAiThink,
             id: Date.now()
         }
-
         filterCities(currentWord.name)
         reset()
         startTheGame(true)
@@ -64,7 +63,7 @@ const Game = () => {
         }
 
 
-    }
+    },[isAiThink])
 
     const listen = (e: KeyboardEvent) => {
         if (e.key === 'Enter') {
@@ -86,7 +85,7 @@ const Game = () => {
                 if (currentWord) {
                     send(currentWord)
                 }
-            }, 5000 - cities.length * 10)
+            }, 252500 - cities.length * 100)
 
         } else {
             input.current?.focus()
@@ -101,7 +100,7 @@ const Game = () => {
     return (
         <>
             {time < 0 ? <GameOver/> : <>
-                <Header time={time}/>
+                <Header time={time} isAiThink={isAiThink}/>
                 <div className={`relative `}>
                     <TimeStrip className="bg-zinc-100 w-full"/>
                     <TimeStrip className={`absolute bg-violet-300  left-0 top-0`} time={time}/>

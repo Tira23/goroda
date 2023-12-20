@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, memo, useEffect, useState} from 'react';
 
 interface IProps {
     className?: string
@@ -20,4 +20,4 @@ const TimeStrip: FC<IProps> = ({className, time = 120}) => {
     );
 };
 
-export default TimeStrip;
+export default memo(TimeStrip);

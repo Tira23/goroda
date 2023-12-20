@@ -9,6 +9,9 @@ module.exports = {
             '3': '3px',
         },
         extend: {
+            screens:{
+                'tablet': '360px'
+            },
             boxShadow: {
                 '130': '0px 1px 3px 0px rgba(0, 0, 0, 0.10), 0px 1px 2px 0px rgba(0, 0, 0, 0.06)',
             },
