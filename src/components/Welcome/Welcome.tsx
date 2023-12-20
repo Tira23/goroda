@@ -20,7 +20,7 @@ const Welcome = () => {
                         он считается проигравшим
                     </li>
                 </ul>
-                <Link to={'/game'}
+                <Link to={'/'}
                       className={`hover:bg-purple-500 transition delay-100 hover:shadow-130 ease-in-out rounded bg-violet-600 w-32 mx-auto h-10 text-white`}
                 >
                     <button className={`w-32 h-10`}>

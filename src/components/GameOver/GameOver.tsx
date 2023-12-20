@@ -1,4 +1,5 @@
 import React, {FC} from 'react';
+import {Link} from "react-router-dom";
 
 interface IProps {
     youWinner?: boolean
@@ -6,8 +7,7 @@ interface IProps {
     lastCity?: string
 }
 
-const GameOver: FC<IProps> = (props) => {
-    const {youWinner, quantity, lastCity} = props
+const GameOver: FC<IProps> = ({youWinner, quantity, lastCity}) => {
     return (
         <div className={`w-576 p-10 text-xl`}>
             <div className={`flex flex-col gap-8 items-center`}>
@@ -36,7 +36,9 @@ const GameOver: FC<IProps> = (props) => {
                     <h2 className={`text-2xl`}><b>{lastCity}</b></h2>
                 </div>
                 <div>
-                    <button className={`bg-violet-600 py-2 px-4 text-base`}> Начать новую игру</button>
+                    <Link to={'/game'}>
+                        <button className={`bg-violet-600 py-2 px-4 text-base`}> Начать новую игру</button>
+                    </Link>
                 </div>
             </div>
         </div>

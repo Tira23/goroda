@@ -22,37 +22,37 @@ const Game = () => {
     const window = useRef<HTMLDivElement>(null);
     const aiThinkStyle = isAiThink ? 'bg-zinc-400' : 'bg-violet-600 cursor-pointer hover:bg-purple-500 transition delay-50 hover:shadow-130 ease-in-out '
 
-    const send = (word = input.current?.value) => {
-        if (!word) {
+    const send = (word = input.current?.value.trim()) => {
+        if (!word || /^[А-Я][а-я]*/.test(word)) {
+            input.current!.value = ''
             return
         }
-
         const [curWord, currentLastChar] = charForFind(word)
-
-        setPlaceholder(`напишите город на ${currentLastChar}`)
         const wordRepeat = wordArray.find(item => item.name === curWord)
-
         if (wordRepeat) {
             const [, prevLastChar] = charForFind(wordArray.at(-1)!.name)
             input.current!.value = ''
             setPlaceholder(`Такой город уже был, вам на ${prevLastChar}`)
             return
         }
+        const findCity = cities.find(item => item.toLowerCase() === curWord.toLowerCase())
+        if (!findCity) {
+            input.current!.value = ''
+            setPlaceholder(`Разве такой город есть?`)
+            return
+        }
         if (wordArray.length && !isAiThink) {
             const [, prevLastChar] = charForFind(wordArray.at(-1)!.name)
-            const findCity = cities.find(item => item.toLowerCase() === curWord.toLowerCase())
-            if (!findCity) {
-                input.current!.value = ''
-                setPlaceholder(`А точно такой город доступен? Вам на ${prevLastChar}`)
-                return
-            }
+            input.current!.value = ''
+            setPlaceholder(`А точно такой город доступен? Вам на ${prevLastChar}`)
+            return
         }
         const currentWord = {
             name: curWord,
             AI: isAiThink,
             id: Date.now()
         }
-
+        setPlaceholder(`напишите город на ${currentLastChar}`)
         filterCities(currentWord.name)
         reset()
         startTheGame(true)
@@ -84,7 +84,7 @@ const Game = () => {
             setTimeout(() => {
                 const currentWord = cities.find(item => item[0] === currentLastChar)
                 if (currentWord) {
-                    send(currentWord)
+                    send(currentWord.trim())
                 }
             }, 252500 - cities.length * 100)
 
@@ -100,39 +100,41 @@ const Game = () => {
 
     return (
         <>
-            {time < 0 ? <GameOver/> : <>
-                <Header time={time} isAiThink={isAiThink}/>
-                <div className={`relative `}>
-                    <TimeStrip className="bg-zinc-100 w-full"/>
-                    <TimeStrip className={`absolute bg-violet-300  left-0 top-0`} time={time}/>
-                </div>
-                <div ref={window}
-                     className={`custom-scroll w-full h-80 py-5 px-4 overflow-auto scroll-p-5`}>
-                    {isStarted
-                        ? wordArray.map(({name, AI, id}) => <Word str={name} key={id} AI={AI}/>)
-                        : <div className={`w-full h-full flex justify-center items-center text-zinc-400`}>
-                            <span>Первый участник вспоминает города...</span>
-                        </div>
-                    }
-                </div>
-                {isStarted && <div className={`flex justify-center text-zinc-400`}>
-                    <span>всего перечислено городов: {wordArray.length} </span>
-                </div>}
-                <div className={`h-12 p-2 pl-3 gap-4 m-4 flex justify-between  items-center bg-gray-100 rounded-md`}>
-                    <input
-                        placeholder={placeholder}
-                        className={`w-full placeholder:zinc-400 text-zinc-700 border-none outline-none bg-gray-100`}
-                        ref={input}
-                    />
-                    <button
-                        onClick={() => send()}
-                        className={`rounded ${aiThinkStyle} p-1`}
-                        disabled={isAiThink}
-                    >
-                        <img src={icon} alt='отправить'/>
-                    </button>
-                </div>
-            </>}
+            {time < 0 ?
+                <GameOver lastCity={wordArray.at(-1)!.name} quantity={wordArray.length} youWinner={isAiThink}/> : <>
+                    <Header time={time} isAiThink={isAiThink}/>
+                    <div className={`relative `}>
+                        <TimeStrip className="bg-zinc-100 w-full"/>
+                        <TimeStrip className={`absolute bg-violet-300  left-0 top-0`} time={time}/>
+                    </div>
+                    <div ref={window}
+                         className={`custom-scroll w-full h-80 py-5 px-4 overflow-auto scroll-p-5`}>
+                        {isStarted
+                            ? wordArray.map(({name, AI, id}) => <Word str={name} key={id} AI={AI}/>)
+                            : <div className={`w-full h-full flex justify-center items-center text-zinc-400`}>
+                                <span>Первый участник вспоминает города...</span>
+                            </div>
+                        }
+                    </div>
+                    {isStarted && <div className={`flex justify-center text-zinc-400`}>
+                        <span>всего перечислено городов: {wordArray.length} </span>
+                    </div>}
+                    <div
+                        className={`h-12 p-2 pl-3 gap-4 m-4 flex justify-between  items-center bg-gray-100 rounded-md`}>
+                        <input
+                            placeholder={placeholder}
+                            className={`w-full placeholder:zinc-400 text-zinc-700 border-none outline-none bg-gray-100`}
+                            ref={input}
+                        />
+                        <button
+                            onClick={() => send()}
+                            className={`rounded ${aiThinkStyle} p-1`}
+                            disabled={isAiThink}
+                        >
+                            <img src={icon} alt='отправить'/>
+                        </button>
+                    </div>
+                </>}
         </>
     );
 };
