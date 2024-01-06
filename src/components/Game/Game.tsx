@@ -23,7 +23,7 @@ const Game = () => {
     const aiThinkStyle = isAiThink ? 'bg-zinc-400' : 'bg-violet-600 cursor-pointer hover:bg-purple-500 transition delay-50 hover:shadow-130 ease-in-out '
 
     const send = (word = input.current?.value.trim()) => {
-        if (!word || /^[А-Я][а-я]*/.test(word)) {
+        if (!word || /^[A-Z][a-z]*/.test(word)) {
             input.current!.value = ''
             return
         }
@@ -41,12 +41,15 @@ const Game = () => {
             setPlaceholder(`Разве такой город есть?`)
             return
         }
-        if (wordArray.length && !isAiThink) {
-            const [, prevLastChar] = charForFind(wordArray.at(-1)!.name)
-            input.current!.value = ''
-            setPlaceholder(`А точно такой город доступен? Вам на ${prevLastChar}`)
-            return
-        }
+        // if (wordArray.length && !isAiThink) {
+        //     console.log(wordArray);
+        //     console.log(!isAiThink);
+        //
+        //     const [, prevLastChar] = charForFind(wordArray.at(-1)!.name)
+        //     input.current!.value = ''
+        //     setPlaceholder(`А точно такой город доступен? Вам на ${prevLastChar}`)
+        //     return
+        // }
         const currentWord = {
             name: curWord,
             AI: isAiThink,
